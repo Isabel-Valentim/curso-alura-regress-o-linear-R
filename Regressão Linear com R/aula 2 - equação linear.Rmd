@@ -1,0 +1,80 @@
+```{r}
+# Criar uma equação linear simples para poder fazer indentificar o preço de umca casa
+mod1 = lm(preco ~ area, data = dados)
+mod1
+```
+Função
+preco = b0 *area + b1
+
+Coefficients:
+(Intercept)         area  
+     502347         7851  
+     
+b0 = 502347
+b1 = 7851 
+
+```{r}
+preco_70 = 502347+ 7851*70
+preco_70
+#preço de uma casa com 70 m2
+```
+```{r}
+mod1$coefficients[[1]] + mod1$coefficients[[2]]*70
+```
+```{r}
+#rodar tudo ctrl shift enter
+plot(dados$area,dados$preco, main = 'Diagrama e reta')
+abline(mod1, col = 'red')
+```
+```{r}
+summary(mod1)
+# verificar o valor Pr(>|t|) dos coeficientes
+# mais perto de zero mais forte a relaçao
+# 3 estrelinhas - relação é forte
+
+# considerar F-statistic : p-value: < 2.2e-16 
+# significa que o modelo é melhor do que simplesmente considerar o preco média  
+
+# considerar o Multiple R-squared:
+# quanto mais perto o valor de 1, melhor é o modelo
+
+names(summary(mod1))
+
+summary(mod1)$r.squared
+```
+```{r}
+#rodar no CONSOLE
+# registros residuais de fora do modelo
+plot(mod1$residuals)
+identify(mod1$residuals, n= 2)  # clicar no plot para indentificar a posição
+
+#remover essas casas
+dados2 = dados[c(-59, -82), ]
+```
+
+```{r}
+#library(lmtest)
+dwtest(mod1)
+# test durbin-watson test
+# p-value tem que ser maior que 0.05 para rejeitar a hipotese nula que as variáriáveis não são independêntes
+
+```
+```{r}
+plot(mod1$fitted.values, mod1$residuals)
+bptest(mod1)
+# Breusch-Pagan test
+# p-value: menor que 0.05
+
+```
+```{r}
+plot(mod1, 2)
+# normal q-q
+# distribuição normal
+shapiro.test(mod1$residuals)
+# p valor maior que 0.05 - é normal
+
+```
+
+
+#O teste Durbin-Watson tem como hipótese nula que as observações são independentes, como o p-valor = 0.1654 que não é menor que 0.05, não temos evidência suficiente para rejeitar a hipótese nula. Logo, podemos assumir que as observações são independentes. O teste Breusch-Pagan tem como hipótese nula que os resíduos são homocedásticos. Logo, como p-value = 0.6108 que não é menor que 0.05, não temos evidência suficiente para rejeitar a hipótese nula. Então, podemos assumir que os resíduos são homocedásticos. O teste Shapiro-Wilk tem como hipótese nula que a distribuição dos resíduos é normal com média zero, logo como p-value = 0.6353, que não é menor que 0.05, não temos evidência suficiente para rejeitar a hipótese nula,. Sendo assim, podemos assumir normalidade dos resíduos. Finalmente, temos que os resíduos são independentes, homoscedásticos e apresentam distribuição normal centrada em zero; isto significa que satisfaz todas as suposições do modelo.
+

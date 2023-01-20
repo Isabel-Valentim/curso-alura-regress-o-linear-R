@@ -1,0 +1,79 @@
+
+
+```{r}
+library(readxl)
+dados <- read_excel("F:/USERS/GERAT/COOCA/ADMINISTRATIVO/PASTAS PESSOAIS/Isabel/ALURA/Regressão Linear com R/regressaolinear_r-master/dados.xlsx")
+head(dados,5)
+```
+Valores faltantes
+```{r}
+dados[!complete.cases(dados),]
+```
+Gráfico de dispersão para saber a relação entre as variáveis
+```{r}
+plot(dados$area, dados$preco, 
+     main = "Diagrama de disperção", 
+     xlab = "preço das casas", 
+     ylab = 'area das casas', 
+     pch = 19, 
+     col = "blue")
+#conclusão - quanto maior a area, maior o preco
+```
+Correlação de Pearson
+Quantificando a relação
+Quão linhar é a relação entre area e preço 
+escala de -1 a 1
+de 0.7 a 0.9 é uma relação FORTE
+```{r}
+cor(dados$area, dados$preco)
+```
+Fazer um teste
+```{r}
+cor.test(dados$area, dados$preco)
+```
+Relaçao entre preço e tempo 
+```{r}
+plot(dados$tempo, dados$preco)
+# quanto maior o tempo menor o preço
+```
+
+```{r}
+cor.test(dados$tempo, dados$preco)
+#correlação forte e negativa
+```
+Verificar outliers
+```{r}
+boxplot(dados$preco, main='Preço',
+        col = 'purple')
+boxplot(dados$tempo, main='Tempo',
+        col = 'blue')
+boxplot(dados$area, main='Area',
+        col = 'green')
+
+```
+```{r}
+#install.packages('car')
+#library(car)
+```
+```{r}
+Boxplot(dados$preco, main='Preço')
+#fornece a posicao
+```
+
+```{r}
+dados$preco[79]
+```
+```{r}
+# achar quais registros tem um preço superior ao 4º quartil
+
+which(dados$preco > quantile(dados$preco, 0.75))
+
+# acima da caixinha do box plot
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
